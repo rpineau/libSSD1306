@@ -61,7 +61,7 @@ main()
              0b00000000, 0b00000000
         };
 
-        SSD1306::OledI2C oled{"/dev/i2c-1", 0x3C};
+        SSD1306::OledI2C oled{"/dev/i2c-2", 0x3C};
 
         for (auto y = -(bitmap.height() / 2) ;
              y < (oled.height() + (bitmap.height() / 2)) ;
