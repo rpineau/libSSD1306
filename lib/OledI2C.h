@@ -65,7 +65,8 @@ public:
 
     OledI2C(
         const std::string& device,
-        uint8_t address);
+        uint8_t address,
+        bool bIsSSH1106 = false);
 
     virtual ~OledI2C();
 
@@ -110,6 +111,7 @@ private:
     };
 
     std::array<PixelBlock, Blocks> blocks_;
+    uint8_t c_offset;
 };
 
 //------------------------------------------------------------------------
