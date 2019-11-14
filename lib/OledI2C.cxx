@@ -105,11 +105,16 @@ namespace
 
 SSD1306::OledI2C::OledI2C(
     const std::string& device,
-    uint8_t address)
+    uint8_t address,
+    bool bIsSSH1106)
 :
     fd_{-1},
     blocks_{}
 {
+    if(bIsSSH1106)
+        c_offset = 2;
+    else
+        c_offset = 0;
     fd_ = FileDescriptor{::open(device.c_str(), O_RDWR)};
 
     if (fd_.fd() == -1)
@@ -141,7 +146,7 @@ SSD1306::OledI2C::~OledI2C() = default;
 
 SSD1306::OledI2C::PixelBlock::PixelBlock()
 :
-    bytes_{OLED_DATA, 0x00}, 
+    bytes_{OLED_DATA, 0x00},
     dirty_{true}
 {
 }
@@ -335,7 +340,7 @@ SSD1306::OledI2C::displayUpdate()
             uint8_t column_high = (column >> 4) & 0x0F;
 
             sendCommand(OLED_SET_PAGE_START_ADDRESS_MASK | page);
-            sendCommand(OLED_SET_COLUMN_START_LOW_MASK | column_low);
+            sendCommand(OLED_SET_COLUMN_START_LOW_MASK | column_low | c_offset);
             sendCommand(OLED_SET_COLUMN_START_HIGH_MASK | column_high);
 
             if (::write(fd_.fd(),
@@ -373,7 +378,7 @@ SSD1306::OledI2C::fillWith(
     {
         auto& bytes = block.bytes_;
 
-        for (auto byte = bytes.begin() + SSD1306::OledI2C::DataOffset ; 
+        for (auto byte = bytes.begin() + SSD1306::OledI2C::DataOffset ;
              byte != bytes.end() ;
              ++byte)
         {

@@ -41,7 +41,7 @@
 #include <time.h>
 #include <unistd.h>
 
-#include <netinet/in.h> 
+#include <netinet/in.h>
 #include <arpa/inet.h>
 #include <sys/time.h>
 
@@ -50,7 +50,7 @@
 
 //-------------------------------------------------------------------------
 
-namespace 
+namespace
 {
 volatile static std::sig_atomic_t run = 1;
 }
@@ -155,7 +155,7 @@ main()
             }
         }
 
-        SSD1306::OledI2C oled{"/dev/i2c-1", 0x3C};
+        SSD1306::OledI2C oled{"/dev/i2c-2", 0x3C};
 
         while (run)
         {
