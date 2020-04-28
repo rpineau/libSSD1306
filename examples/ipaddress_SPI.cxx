@@ -46,7 +46,7 @@
 #include <sys/time.h>
 
 #include "OledFont8x16.h"
-#include "OledI2C.h"
+#include "OledSPI.h"
 
 //-------------------------------------------------------------------------
 
@@ -76,7 +76,7 @@ signalHandler(
 
 void
 showAddresses(
-    SSD1306::OledI2C& oled)
+    SSD1306::OledSPI & oled)
 {
     oled.clear();
 
@@ -157,7 +157,7 @@ main()
             }
         }
 
-        SSD1306::OledI2C oled{"/dev/i2c-2", 0x3C};
+        SSD1306::OledSPI oled{"/dev/spidev0.0", true};
 	oled.clear();
         while (run)
         {
