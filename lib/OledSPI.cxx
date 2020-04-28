@@ -119,7 +119,7 @@ SSD1306::OledSPI::OledSPI(
         printf("Unable to open /dev/gpiomem\n");
         return ;
     }
- 
+
     gpio = (uint32_t*)mmap(0, BLOCK_SIZE, PROT_READ | PROT_WRITE, MAP_SHARED, fd, GPIO_REG_MAP);
     // Set direction of GPIOA.4 register to out
     *(gpio + (GPIOA_FSEL_REG_OFFSET)) &= ~(1 << 4);
@@ -165,7 +165,7 @@ SSD1306::OledSPI::OledSPI(
     }
 
     // SPI speed
-    if (ioctl(fd_.fd(), SPI_IOC_WR_MAX_SPEED_HZ, &bits) == -1)
+    if (ioctl(fd_.fd(), SPI_IOC_WR_MAX_SPEED_HZ, &speed) == -1)
     {
         std::string what( "ioctl SPI_IOC_WR_MAX_SPEED_HZ " __FILE__ "("
                         + std::to_string(__LINE__)
@@ -173,7 +173,7 @@ SSD1306::OledSPI::OledSPI(
         throw std::system_error(errno, std::system_category(), what);
     }
 
-    
+
     init();
 }
 
@@ -512,8 +512,8 @@ void SSD1306::OledSPI::sendCommand(uint8_t command) const
     tr.speed_hz = speed;
     tr.bits_per_word = bits;
     tr.cs_change = 0;
-    
- 
+
+
    if (ioctl(fd_.fd(), SPI_IOC_MESSAGE(1), &tr) < 1)
     {
         std::string what( "write " __FILE__ "("
@@ -529,10 +529,10 @@ void SSD1306::OledSPI::sendCommand(uint8_t command, uint8_t value) const
 {
     struct spi_ioc_transfer tr;
     memset(&tr, 0, sizeof(tr));
-    
+
     commandMode();
     std::array<uint8_t, 2> data{ command, value};
-     
+
     tr.tx_buf = (unsigned long)data.data();
     tr.rx_buf = 0;
     tr.len = data.size();
@@ -540,8 +540,8 @@ void SSD1306::OledSPI::sendCommand(uint8_t command, uint8_t value) const
     tr.speed_hz = speed;
     tr.bits_per_word = bits;
     tr.cs_change = 0;
- 
- 
+
+
    if (ioctl(fd_.fd(), SPI_IOC_MESSAGE(1), &tr) < 1) {
         std::string what( "write " __FILE__ "("
                         + std::to_string(__LINE__)
@@ -581,7 +581,7 @@ void SSD1306::OledSPI::sendData(uint8_t *data, int len) const
 {
     struct spi_ioc_transfer tr;
     memset(&tr, 0, sizeof(tr));
-    
+
     dataMode();
     tr.tx_buf = (unsigned long)data;
     tr.rx_buf = 0;
