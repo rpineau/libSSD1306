@@ -17,6 +17,7 @@ add_library(SSD1306 STATIC lib/FileDescriptor.cxx
 						   lib/OledFont8x12.cxx
 						   lib/OledFont8x16.cxx
 						   lib/OledGraphics.cxx
+						   lib/OledSPI.cxx
 						   lib/OledI2C.cxx)
 
 include_directories(${PROJECT_SOURCE_DIR}/lib)
@@ -43,3 +44,5 @@ target_link_libraries(testbitmap SSD1306)
 add_executable(testoled examples/testoled.cxx examples/LinuxKeys.cxx)
 target_link_libraries(testoled SSD1306)
 
+add_executable(ipaddress_SPI examples/ipaddress_SPI.cxx examples/LinuxKeys.cxx)
+target_link_libraries(ipaddress_SPI SSD1306)
